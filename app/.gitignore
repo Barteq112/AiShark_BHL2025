@@ -1,3 +1,6 @@
+# folders
+/app/backend/__pycache__/
+
 # Logs
 logs
 *.log
