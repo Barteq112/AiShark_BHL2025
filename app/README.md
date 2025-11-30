@@ -7,7 +7,8 @@
 
 1. Install dependencies:
    `npm install`
-1.1. Zależności Python
+   
+   1.1. Zależności Python
 
 ```bash
 # FastAPI i serwer ASGI (uvicorn)
@@ -166,6 +167,7 @@ Germany (de)	52%	Equinix, Hetzner, Interxion, Global Switch, Vantage, Colt DCS (
 France (fr)	78%	Data4, OVH (Gravelines, Roubaix, Strasbourg), Global Switch, Interxion (Paris)	maintenance
 Poland (pl)	25%	Atman, Equinix Warsaw, Beyond.pl, Data4 Poland, 3S Data Center, COIG / WASKO	online
 Definiuje również URL do mapy GeoJSON dla Europy: https://raw.githubusercontent.com/leakyMirror/map-of-europe/master/GeoJSON/europe.geojson.
+
 
 
 
