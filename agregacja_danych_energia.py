@@ -90,6 +90,14 @@ if dataframes:
         full_df[col] = pd.to_numeric(full_df[col])
 
     print(full_df.info())
+    # --- ZMIANA NAZW KOLUMN (NOWY FRAGMENT) ---
+    # 1. Usuwamy " [MW]"
+    full_df.columns = full_df.columns.str.replace(' [MW]', '', regex=False)
+    # 2. Usuwamy " - Actual Aggregated" (dla czytelności, zostaje np. samo "Biomass")
+    full_df.columns = full_df.columns.str.replace(' - Actual Aggregated', '', regex=False)
+
+    print("Zmienione nazwy kolumn:")
+    print(full_df.columns.tolist())
 
     # 1. Zdefiniowanie kolumn z produkcją (wszystkie poza 'Area' i 'start_time')
     cols_production = [col for col in full_df.columns if col not in ['Area', 'start_time']]
