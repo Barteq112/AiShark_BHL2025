@@ -26,7 +26,7 @@ COUNTRIES_DATA = [
         "name": "Poland",
         "lat": 52.06, # Środek Polski
         "lon": 19.48,
-        "renewablePercentage": 30,
+        "renewablePercentage": 20,
         "facilities": ["Atman", "Equinix Warsaw", "Beyond.pl", "Data4 Poland", "3S Data Center", "COIG / WASKO"]
     },
     {
