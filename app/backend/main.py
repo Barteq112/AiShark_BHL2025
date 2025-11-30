@@ -104,11 +104,11 @@ def get_energy_data(request: ComputeRequest):
 
     KRAJE_I_ZMIENNE = {
         "Polska": "ren_Poland",
-        "Niemcy": "ren_Germany",
-        "Norwegia": "ren_Norway",
-        "Francja": "ren_France",
-        "Holandia": "ren_Netherlands",
-        "Włochy": "ren_Italy"
+        "Germany": "ren_Germany",
+        "Norway": "ren_Norway",
+        "France": "ren_France",
+        "Netherlands": "ren_Netherlands",
+        "Italy": "ren_Italy"
     }
 
     klucz_predykcji = PRED_MAPOWANIE.get(request.computeType, None)

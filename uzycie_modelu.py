@@ -27,8 +27,8 @@ def prognozuj_oze_dla_kraju(kraj, target_date):
     scaler_filename = BASE_DIR / 'model_output' / 'lstm' / f'scaler_{kraj}.pkl'
     model_filename = BASE_DIR / 'model_output' / 'lstm' / f'final_model_{kraj}.keras'
 
-    data_energy_path = BASE_DIR / 'Kraje_2022_2025' / f'dane_energia_{kraj}.csv'
-    data_weather_path = BASE_DIR / 'Kraje_2022_2025' / f'{kraj.lower()}_pogoda_godzinowa.csv'
+    data_energy_path = BASE_DIR / 'data' /'data'/'Data_energy_2022_2025'/ f'dane_energia_{kraj}_energy.csv'
+    data_weather_path = BASE_DIR / 'data' / 'data' / 'Datat_wheather_2022_2025' / f'{kraj}_pogoda_godzinowa.csv'
 
     # Parametry modelu
     LOOKBACK = 48
@@ -188,7 +188,7 @@ def prognozuj_oze_dla_kraju(kraj, target_date):
     real_48 = np.mean(y_true[:48]) if len(y_true) >= 48 else np.nan
     real_72 = np.mean(y_true) if len(y_true) > 0 else np.nan
 
-    print(f"Sukces. Wygenerowano prognozę dla: {target_date}")
+    print(f"Rzeczywistość 24h: {real_24}")
 
     return {
         "kraj": kraj,
