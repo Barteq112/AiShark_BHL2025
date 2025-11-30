@@ -15,7 +15,7 @@ const Home: React.FC<HomeProps> = ({ onStartCompute }) => {
           <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)]">
              <Leaf className="text-slate-900 w-5 h-5" />
           </div>
-          <span className="font-bold text-xl tracking-tight">GreenComputing</span>
+          <span className="font-bold text-xl tracking-tight">GreenOps Engine</span>
         </div>
         <nav>
             <button className="text-sm text-slate-400 hover:text-white transition-colors">Documentation</button>
@@ -104,7 +104,7 @@ const Home: React.FC<HomeProps> = ({ onStartCompute }) => {
 
       {/* Footer */}
       <footer className="p-6 text-center text-slate-600 text-sm">
-        <p>&copy; 2025 GreenComputing. Powered by nature.</p>
+        <p>&copy; 2025 GreenOps Engine. Powered by Ai Sharks.</p>
       </footer>
     </div>
   );

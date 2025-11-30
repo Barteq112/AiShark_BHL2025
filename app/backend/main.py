@@ -76,6 +76,15 @@ COUNTRIES_DATA = [
 def get_energy_data(request: ComputeRequest):
     # To wyświetli Ci w terminalu backendu co kliknął użytkownik
     print(f"Otrzymano zapytanie dla: {request.computeType}") 
+    match request.computeType:
+        case "Light computing":
+            steps = 12
+        case "Medium computing":
+            steps = 36
+        case "Heavy computing":
+            steps = 72
+        case _:
+            steps = 12
     
     return {
         "status": "success",
