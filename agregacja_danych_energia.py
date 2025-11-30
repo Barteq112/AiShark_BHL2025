@@ -2,12 +2,12 @@ import pandas as pd
 import numpy as np
 import os
 
-kraj = "Polska"
+kraj = "Norway_energy"
 # Definicja ścieżki do folderu
 base_path = os.path.join('data', kraj)
 
 # Lista lat do przetworzenia (od 2022 do 2025 włącznie)
-lata = range(2022, 2026)
+lata = range(2022, 2025)
 
 dataframes = []
 
@@ -33,12 +33,31 @@ for rok in lata:
 # Łączenie danych
 if dataframes:
     full_df = pd.concat(dataframes, ignore_index=True)
-    # Zamiana "n/e" na NaN (Not a Number)
-    full_df = full_df.replace('n/e', np.nan)
-    full_df = full_df.replace('-', np.nan)
 
-    # 1. Pobieramy tylko część przed " - " (czyli czas startu)
+    # --- CZYSZCZENIE DATY ---
     full_df['start_time'] = full_df['MTU'].str.split(' - ').str[0]
+    full_df['start_time'] = pd.to_datetime(full_df['start_time'], dayfirst=True)
+    full_df = full_df[full_df['start_time'].dt.minute == 0]
+    full_df = full_df.drop(columns=['MTU'])
+
+    # --- USUWANIE ZBĘDNYCH KOLUMN ---
+    kolumny_do_usuniecia = [
+        'Energy storage - Actual Aggregated [MW]',
+        'Fossil Oil shale - Actual Aggregated [MW]',
+        'Fossil Peat - Actual Aggregated [MW]',
+        'Geothermal - Actual Aggregated [MW]',
+        'Hydro Pumped Storage - Actual Consumption [MW]',
+        'Marine - Actual Aggregated [MW]',
+        'Nuclear - Actual Aggregated [MW]',
+        'Other - Actual Aggregated [MW]',
+        'Other renewable - Actual Aggregated [MW]',
+        'Waste - Actual Aggregated [MW]',
+        'Wind Offshore - Actual Aggregated [MW]',
+        'Area'
+    ]
+    full_df = full_df.drop(columns=kolumny_do_usuniecia, errors='ignore')
+
+
 
     # 2. Konwersja na typ datetime (ważne: dayfirst=True dla formatu polskiego 01.01.2022)
     full_df['start_time'] = pd.to_datetime(full_df['start_time'], dayfirst=True)
@@ -46,37 +65,26 @@ if dataframes:
     # 3. Filtrowanie: zostawiamy tylko wiersze, gdzie minuta wynosi 0
     full_df = full_df[full_df['start_time'].dt.minute == 0]
 
-    # 4. Usuwamy niepotrzebną już kolumnę 'MTU'
-    full_df = full_df.drop(columns=['MTU'])
-
     # Sprawdzenie wyniku
     print(f"Liczba wierszy po filtracji: {len(full_df)}")
     print(full_df['start_time'].head())
 
-    # Lista kolumn do usunięcia
-    kolumny_do_usuniecia = [
-        'Energy storage - Actual Aggregated [MW]',
-        'Fossil Oil shale - Actual Aggregated [MW]',
-        'Fossil Peat - Actual Aggregated [MW]',
-        'Geothermal - Actual Aggregated [MW]',
-        'Hydro Pumped Storage - Actual Consumption [MW]',  # To ta co ma ~7 tys.
-        'Marine - Actual Aggregated [MW]',
-        'Nuclear - Actual Aggregated [MW]',
-        'Other - Actual Aggregated [MW]',  # To ta co ma ~11.9 tys.
-        'Other renewable - Actual Aggregated [MW]',  # To ta co ma ~11.9 tys.
-        'Waste - Actual Aggregated [MW]',
-        'Wind Offshore - Actual Aggregated [MW]',
-        'Area'
-    ]
+    # Lista kolumn produkcyjnych (wszystko poza start_time)
+    cols_to_convert = [col for col in full_df.columns if col != 'start_time']
 
-    # Usunięcie kolumn (errors='ignore' sprawi, że kod nie wyrzuci błędu,
-    # jeśli którejś kolumny już wcześniej nie było)
-    full_df = full_df.drop(columns=kolumny_do_usuniecia, errors='ignore')
+    # 1. Najpierw wymuszamy konwersję na liczby.
+    # 'coerce' zamieni wszystkie "n/e", "-", spacje i śmieci na NaN (Not a Number)
+    for col in cols_to_convert:
+        full_df[col] = pd.to_numeric(full_df[col], errors='coerce')
 
-    # Usuwanie wierszy z brakującymi danymi
-    full_df = full_df.dropna()
+    # Diagnostyka: Zobaczmy ile mamy braków w każdej kolumnie
+    print("\n--- DIAGNOSTYKA BRAKÓW DANYCH ---")
+    print(full_df.isnull().sum())
 
-    # Resetowanie indeksu (żeby numery wierszy szły po kolei: 0, 1, 2...)
+    # 2
+    full_df = full_df.fillna(0)
+
+    # Resetowanie indeksu
     full_df = full_df.reset_index(drop=True)
 
     # Sprawdzenie wyniku
@@ -104,7 +112,7 @@ if dataframes:
 
     # 2. Stworzenie kolumny z sumą całkowitą
     full_df['Total Generation [MW]'] = full_df[cols_production].sum(axis=1)
-
+    full_df = full_df[full_df['Total Generation [MW]'] > 0]
     # 3. Zamiana poszczególnych kolumn na wartości względne (0.0 - 1.0)
     # Dzielimy każdą kolumnę produkcyjną przez nowo powstałą sumę
     for col in cols_production:

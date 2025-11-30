@@ -50,8 +50,8 @@ Kraj = 'Polska'
 
 # --- 2. WCZYTYWANIE DANYCH ---
 print("Wczytywanie danych...")
-df_energy = pd.read_csv(f'Kraje_2022_2025/dane_energia_{Kraj}.csv')
-df_weather = pd.read_csv(f'Kraje_2022_2025/{Kraj.lower()}_pogoda_godzinowa.csv')
+df_energy = pd.read_csv(f'data/data/Data_energy_2022_2025/dane_energia_{Kraj}_energy.csv')
+df_weather = pd.read_csv(f'data/data/Datat_wheather_2022_2025/{Kraj}_pogoda_godzinowa.csv')
 
 # --- 3. PREPROCESSING ---
 df_energy[ENERGY_TIME_COL] = pd.to_datetime(df_energy[ENERGY_TIME_COL])
