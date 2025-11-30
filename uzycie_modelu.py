@@ -3,8 +3,13 @@ import numpy as np
 import tensorflow as tf
 import joblib
 import os
+import pathlib
 
-
+BASE_DIR = pathlib.Path(__file__).resolve().parent
+CUSTOM_KERAS_OBJECTS = {
+   
+    'Orthogonal': tf.keras.initializers.Orthogonal
+}
 # --- FUNKCJE POMOCNICZE ---
 def add_cyclical_features(df, col_name, period):
     df[f'{col_name}_sin'] = np.sin(df[col_name] * (2. * np.pi / period))
@@ -19,12 +24,11 @@ def prognozuj_oze_dla_kraju(kraj, target_date):
     """
 
     # --- 1. KONFIGURACJA ŚCIEŻEK ---
-    scaler_filename = f'model_output/lstm/scaler_{kraj}.pkl'
-    model_filename = f'model_output/lstm/final_model_{kraj}.keras'
+    scaler_filename = BASE_DIR / 'model_output' / 'lstm' / f'scaler_{kraj}.pkl'
+    model_filename = BASE_DIR / 'model_output' / 'lstm' / f'final_model_{kraj}.keras'
 
-    data_energy_path = f'Kraje_2022_2025/dane_energia_{kraj}.csv'
-    # Zakładam, że nazwa pliku pogody jest zgodna z poprzednim schematem
-    data_weather_path = f'Kraje_2022_2025/{kraj.lower()}_pogoda_godzinowa.csv'
+    data_energy_path = BASE_DIR / 'Kraje_2022_2025' / f'dane_energia_{kraj}.csv'
+    data_weather_path = BASE_DIR / 'Kraje_2022_2025' / f'{kraj.lower()}_pogoda_godzinowa.csv'
 
     # Parametry modelu
     LOOKBACK = 48
@@ -59,7 +63,7 @@ def prognozuj_oze_dla_kraju(kraj, target_date):
 
     # --- 3. WCZYTYWANIE MODELU I SCALERA ---
     try:
-        model = tf.keras.models.load_model(model_filename)
+        model = tf.keras.models.load_model(model_filename, custom_objects=CUSTOM_KERAS_OBJECTS)
         scaler = joblib.load(scaler_filename)
     except Exception as e:
         print(f"Błąd podczas wczytywania modelu/scalera: {e}")
@@ -207,20 +211,20 @@ def prognozuj_oze_dla_kraju(kraj, target_date):
 KRAJ = 'Polska'
 DATA_DOCELOWA = '2024-12-25 12:00:00'
 
-wynik = prognozuj_oze_dla_kraju(KRAJ, DATA_DOCELOWA)
+# wynik = prognozuj_oze_dla_kraju(KRAJ, DATA_DOCELOWA)
 
-if wynik:
-    # Obliczanie błędu (w punktach procentowych)
-    diff_24 = (wynik['pred_24h'] - wynik['real_24h']) * 100
-    diff_48 = (wynik['pred_48h'] - wynik['real_48h']) * 100
-    diff_72 = (wynik['pred_calosc'] - wynik['real_calosc']) * 100
+# if wynik:
+#     # Obliczanie błędu (w punktach procentowych)
+#     diff_24 = (wynik['pred_24h'] - wynik['real_24h']) * 100
+#     diff_48 = (wynik['pred_48h'] - wynik['real_48h']) * 100
+#     diff_72 = (wynik['pred_calosc'] - wynik['real_calosc']) * 100
 
-    print("\n" + "=" * 75)
-    print(f"RAPORT PORÓWNAWCZY DLA: {wynik['kraj']} (Start: {wynik['data']})")
-    print("=" * 75)
-    print(f"{'HORYZONT':<10} | {'PROGNOZA':<15} | {'RZECZYWISTOŚĆ':<15} | {'RÓŻNICA (pp)':<15}")
-    print("-" * 75)
-    print(f"{'24h':<10} | {wynik['pred_24h']:<15.2%} | {wynik['real_24h']:<15.2%} | {diff_24:+5.2f} p.p.")
-    print(f"{'48h':<10} | {wynik['pred_48h']:<15.2%} | {wynik['real_48h']:<15.2%} | {diff_48:+5.2f} p.p.")
-    print(f"{'72h':<10} | {wynik['pred_calosc']:<15.2%} | {wynik['real_calosc']:<15.2%} | {diff_72:+5.2f} p.p.")
-    print("=" * 75)
+#     print("\n" + "=" * 75)
+#     print(f"RAPORT PORÓWNAWCZY DLA: {wynik['kraj']} (Start: {wynik['data']})")
+#     print("=" * 75)
+#     print(f"{'HORYZONT':<10} | {'PROGNOZA':<15} | {'RZECZYWISTOŚĆ':<15} | {'RÓŻNICA (pp)':<15}")
+#     print("-" * 75)
+#     print(f"{'24h':<10} | {wynik['pred_24h']:<15.2%} | {wynik['real_24h']:<15.2%} | {diff_24:+5.2f} p.p.")
+#     print(f"{'48h':<10} | {wynik['pred_48h']:<15.2%} | {wynik['real_48h']:<15.2%} | {diff_48:+5.2f} p.p.")
+#     print(f"{'72h':<10} | {wynik['pred_calosc']:<15.2%} | {wynik['real_calosc']:<15.2%} | {diff_72:+5.2f} p.p.")
+#     print("=" * 75)
