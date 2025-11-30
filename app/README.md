@@ -7,6 +7,35 @@
 
 1. Install dependencies:
    `npm install`
+1.1. Zależności Python
+
+```bash
+# FastAPI i serwer ASGI (uvicorn)
+pip install fastapi uvicorn
+
+# Middleware CORS (opcjonalne, ale często używane)
+pip install fastapi[all]
+
+# Pydantic (często instalowany z FastAPI)
+pip install pydantic
+
+# Pandas
+pip install pandas
+
+# NumPy
+pip install numpy
+
+# TensorFlow
+pip install tensorflow
+
+# Joblib
+pip install joblib
+
+# Scikit-learn (sklearn)
+pip install scikit-learn
+```
+
+
 3. Run the app:
    `npm run dev`
 
@@ -137,6 +166,7 @@ Germany (de)	52%	Equinix, Hetzner, Interxion, Global Switch, Vantage, Colt DCS (
 France (fr)	78%	Data4, OVH (Gravelines, Roubaix, Strasbourg), Global Switch, Interxion (Paris)	maintenance
 Poland (pl)	25%	Atman, Equinix Warsaw, Beyond.pl, Data4 Poland, 3S Data Center, COIG / WASKO	online
 Definiuje również URL do mapy GeoJSON dla Europy: https://raw.githubusercontent.com/leakyMirror/map-of-europe/master/GeoJSON/europe.geojson.
+
 
 
 
