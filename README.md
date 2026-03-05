@@ -1,6 +1,8 @@
 # GreenOps Engine
 
-**Projekt zrealizowany przez zespół AI Sharks w ramach hackathonu BHL 2025. Całość rozwiązania została zaprojektowana i zaimplementowana w ciągu zaledwie 24 godzin.**
+**Projekt zrealizowany przez zespół AI Sharks w ramach hackathonu BHL 2025. Całość rozwiązania została zaprojektowana i zaimplementowana w ciągu 24 godzin.**
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/72f92ccd-465f-4c1e-b034-91cb9bb24c24" />
 
 ## O projekcie
 
@@ -51,4 +53,4 @@ Podczas 24-godzinnego hackathonu przetestowaliśmy i zaimplementowaliśmy nastę
 
 Wszystkie wymagania systemowe (requirements) oraz szczegółowa instrukcja uruchomienia aplikacji i modeli znajdują się w dedykowanym pliku README wewnątrz katalogu aplikacji.
 
-Przejdź do instrukcji technicznej: **[app/readme.md](app/readme.md)**
+Przejdź do instrukcji technicznej: **[app/README.md](app/README.md)**
